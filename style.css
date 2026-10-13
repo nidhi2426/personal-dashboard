@@ -1,0 +1,119 @@
+/* ---------- 1. DESIGN TOKENS ----------
+   All colours live in CSS variables. Dark mode just swaps the values,
+   so no other rule needs to know which theme is active. */
+:root {
+  --bg: #e8eeee;
+  --surface: #f6f9f9;
+  --ink: #11262b;
+  --muted: #55696e;
+  --line: #c5d3d4;
+  --accent: #2b59c3;
+  --accent-ink: #ffffff;
+  --danger: #b3261e;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+:root[data-theme="dark"] {
+  --bg: #0e1a1f;
+  --surface: #15262c;
+  --ink: #e6f0f0;
+  --muted: #94acb0;
+  --line: #28404a;
+  --accent: #8fb0ff;
+  --accent-ink: #0e1a1f;
+  --danger: #ff8a80;
+}
+
+/* ---------- 2. BASE ---------- */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1rem/1.5 var(--font-body);
+}
+h2 { margin: 0 0 1rem; font: 700 1.1rem var(--font-display); }
+.muted { color: var(--muted); }
+.sr-only { /* hidden visually, still read by screen readers */
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- 3. HERO (the one bold element) ---------- */
+.hero {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  max-width: 1100px; margin: 0 auto 2.5rem;
+}
+.greeting { margin: 0; color: var(--muted); font-size: 1.1rem; }
+.clock {
+  display: block;
+  font: 700 clamp(4rem, 16vw, 9rem)/1 var(--font-display);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums; /* equal-width digits so the clock doesn't jitter */
+}
+.date { margin: 0.5rem 0 0; color: var(--muted); }
+
+/* ---------- 4. LAYOUT: CSS Grid ----------
+   Mobile first: one column. From 800px up, three columns with a wider middle. */
+.grid { display: grid; gap: 1rem; max-width: 1100px; margin: 0 auto; }
+@media (min-width: 800px) {
+  .grid { grid-template-columns: 1fr 1.5fr 1fr; align-items: start; }
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+/* ---------- 5. FORM CONTROLS ---------- */
+input {
+  width: 100%; padding: 0.6rem 0.75rem;
+  background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 8px; font: inherit;
+}
+button {
+  padding: 0.6rem 0.9rem; cursor: pointer;
+  background: var(--accent); color: var(--accent-ink);
+  border: 0; border-radius: 8px; font: 500 1rem var(--font-body);
+}
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; } /* keyboard users see where they are */
+.row { display: flex; gap: 0.5rem; }
+.row button { white-space: nowrap; }
+.stack { display: grid; gap: 0.5rem; margin-top: 1rem; }
+.icon-btn {
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--line); font-size: 1.3rem; line-height: 1; padding: 0.5rem 0.75rem;
+}
+#key-form { display: grid; gap: 0.5rem; }
+#key-form label { color: var(--muted); font-size: 0.9rem; }
+
+/* ---------- 6. WEATHER ---------- */
+.temp { margin: 0; font: 700 3.5rem/1 var(--font-display); }
+#w-desc { margin: 0.25rem 0 0; text-transform: capitalize; }
+#weather-data p { margin-top: 0.25rem; margin-bottom: 0; }
+
+/* ---------- 7. TO-DO LIST ---------- */
+.todo-list, .link-list { list-style: none; margin: 1rem 0 0; padding: 0; }
+.todo-list li {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.55rem 0; border-top: 1px solid var(--line);
+}
+.todo-list input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
+.todo-list span { flex: 1; overflow-wrap: anywhere; }
+.todo-list li.done span { text-decoration: line-through; color: var(--muted); }
+.del {
+  background: transparent; color: var(--muted); padding: 0.2rem 0.5rem; font-size: 1.2rem;
+}
+.del:hover { color: var(--danger); }
+
+/* ---------- 8. QUICK LINKS ---------- */
+.link-list { margin-top: 0; }
+.link-list li { display: flex; align-items: center; border-top: 1px solid var(--line); }
+.link-list li:first-child { border-top: 0; }
+.link-list a { flex: 1; padding: 0.5rem 0; color: var(--ink); text-decoration: none; font-weight: 500; }
+.link-list a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Respect users who ask their OS to reduce motion */
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

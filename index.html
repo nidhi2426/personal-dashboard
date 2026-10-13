@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Makes the layout scale correctly on phones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start</title>
+
+  <!-- Runs BEFORE the page paints so the saved theme is applied with no light/dark flash -->
+  <script>
+    try {
+      const saved = localStorage.getItem('dash.theme');
+      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+    } catch (e) { document.documentElement.dataset.theme = 'light'; }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- defer = download now, run after the HTML is parsed, so elements exist when script.js looks for them -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- HERO: greeting, big clock, date, and the theme button -->
+  <header class="hero">
+    <div>
+      <p id="greeting" class="greeting"></p>
+      <time id="clock" class="clock">--:--</time>
+      <p id="date" class="date"></p>
+    </div>
+    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Switch between light and dark theme">◐</button>
+  </header>
+
+  <main class="grid">
+
+    <!-- WEATHER -->
+    <section class="panel" aria-labelledby="weather-title">
+      <h2 id="weather-title">Weather</h2>
+      <p id="weather-status" class="muted">Loading weather…</p>
+
+      <!-- Shown only when no API key is saved. Keeps the key out of your public repo. -->
+      <form id="key-form" hidden>
+        <label for="key-input">OpenWeatherMap API key</label>
+        <input id="key-input" type="text" autocomplete="off" required>
+        <button type="submit">Save key</button>
+      </form>
+
+      <div id="weather-data" hidden>
+        <p class="temp"><span id="w-temp"></span>°C</p>
+        <p id="w-desc"></p>
+        <p id="w-place" class="muted"></p>
+        <p id="w-meta" class="muted"></p>
+      </div>
+    </section>
+
+    <!-- TO-DO -->
+    <section class="panel todos" aria-labelledby="todo-title">
+      <h2 id="todo-title">To-do <span id="todo-count" class="muted"></span></h2>
+      <form id="todo-form" class="row">
+        <label for="todo-input" class="sr-only">New task</label>
+        <input id="todo-input" type="text" placeholder="Add a task" maxlength="120" required>
+        <button type="submit">Add task</button>
+      </form>
+      <ul id="todo-list" class="todo-list"></ul>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="panel" aria-labelledby="links-title">
+      <h2 id="links-title">Quick links</h2>
+      <ul id="link-list" class="link-list"></ul>
+      <form id="link-form" class="stack">
+        <label for="link-name" class="sr-only">Link name</label>
+        <input id="link-name" type="text" placeholder="Name" maxlength="30" required>
+        <label for="link-url" class="sr-only">Link address</label>
+        <input id="link-url" type="text" placeholder="example.com" required>
+        <button type="submit">Add link</button>
+      </form>
+    </section>
+
+  </main>
+</body>
+</html>
